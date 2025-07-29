@@ -1,9 +1,11 @@
-/** @type {import('next').NextConfig} */
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+import bundleAnalyzer from '@next/bundle-analyzer'
+
+const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
   openAnalyzer: false,
 })
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
@@ -17,8 +19,5 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
 }
-
-// Remove the other next.config.js file as it's not needed
-// and could cause conflicts
 
 export default withBundleAnalyzer(nextConfig)
