@@ -15,6 +15,20 @@ interface Message {
   isTyping?: boolean
 }
 
+interface UserData {
+  name: string
+  email: string
+  mobile: string
+  company: string
+}
+
+interface FormData {
+  name: string
+  email: string
+  mobile: string
+  company: string
+}
+
 interface WebhookData {
   message: string
   timestamp: string
@@ -23,30 +37,26 @@ interface WebhookData {
 }
 
 export default function InteractiveChatbot() {
+  const [currentStep, setCurrentStep] = useState<'form' | 'chat'>('form')
+  const [userData, setUserData] = useState<UserData | null>(null)
+  const [sessionId, setSessionId] = useState<string>('')
   const [messages, setMessages] = useState<Message[]>([])
   const [inputValue, setInputValue] = useState("")
   const [isTyping, setIsTyping] = useState(false)
-  const [isConnected, setIsConnected] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
-  const sessionId = useRef(Math.random().toString(36).substring(7))
-
-  // Predefined responses for demo purposes
-  const botResponses = [
-    "That's a great question! Our RAG technology can help with exactly that kind of query by understanding your business context.",
-    "I can see how that would be frustrating with traditional chatbots. Quickly4u learns from your specific business data to provide accurate responses.",
-    "Our system processes your documents and creates intelligent responses rather than following rigid scripts.",
-    "That's exactly the kind of complex question our AI excels at. It would analyze your knowledge base and provide a contextual answer.",
-    "Great point! Unlike basic chatbots, our system understands nuance and can handle multi-part questions intelligently.",
-    "I'd be happy to show you how our RAG technology would handle that scenario. Would you like to schedule a personalized demo?",
-    "That's a perfect use case for Quickly4u! Our system would understand your industry-specific terminology and provide expert-level responses.",
-    "Excellent question! Our AI doesn't just match keywords - it truly understands context and generates human-like responses.",
-  ]
+  
+  // Form state
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    mobile: '',
+    company: ''
+  })
 
   const scrollToBottom = () => {
-    // Use scrollTop instead of scrollIntoView to prevent page-level scrolling
     if (messagesContainerRef.current) {
       const container = messagesContainerRef.current
-      // Use setTimeout to ensure DOM has updated
       setTimeout(() => {
         container.scrollTop = container.scrollHeight
       }, 100)
@@ -54,50 +64,87 @@ export default function InteractiveChatbot() {
   }
 
   useEffect(() => {
-    // Only scroll to bottom if we have more than the initial message
-    if (messages.length > 1) {
+    if (messages.length > 0) {
       scrollToBottom()
     }
   }, [messages])
 
+  // Load session data from localStorage on mount
   useEffect(() => {
-    // Initial greeting message - don't trigger scroll
-    const initialMessage: Message = {
-      id: "1",
-      text: "Hey! 👋 I'm powered by Quickly4u's RAG technology. Try asking me anything about your business needs - I'll show you how intelligent conversation should work!",
-      sender: "bot",
-      timestamp: new Date(),
+    const savedUserData = localStorage.getItem('quickly4u_user_data')
+    const savedSessionId = localStorage.getItem('quickly4u_session_id')
+    
+    if (savedUserData && savedSessionId) {
+      const parsedUserData = JSON.parse(savedUserData)
+      setUserData(parsedUserData)
+      setSessionId(savedSessionId)
+      setCurrentStep('chat')
+      
+      // Initialize chat with greeting message
+      const greetingMessage: Message = {
+        id: "1",
+        text: `Hey ${parsedUserData.name}! 👋 I'm powered by Quickly4u's RAG technology. Try asking me anything about your business needs - I'll show you how intelligent conversation should work!`,
+        sender: "bot",
+        timestamp: new Date(),
+      }
+      setMessages([greetingMessage])
     }
-    setMessages([initialMessage])
   }, [])
 
-  const sendWebhookData = async (message: string) => {
-    const webhookData: WebhookData = {
-      message,
-      timestamp: new Date().toISOString(),
-      sessionId: sessionId.current,
-      userAgent: navigator.userAgent,
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!formData.name || !formData.email || !formData.mobile || !formData.company) {
+      alert('Please fill in all fields')
+      return
     }
 
+    setIsSubmitting(true)
+
     try {
-      const response = await fetch("/api/webhook/chat", {
-        method: "POST",
+      const response = await fetch('/api/webhook/form', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(webhookData),
+        body: JSON.stringify(formData)
       })
 
-      if (!response.ok) {
-        console.warn("Webhook failed, but continuing with demo functionality")
+      const result = await response.json()
+
+      if (result.success) {
+        const newUserData = result.userData
+        const newSessionId = result.sessionId
+        
+        // Store in localStorage
+        localStorage.setItem('quickly4u_user_data', JSON.stringify(newUserData))
+        localStorage.setItem('quickly4u_session_id', newSessionId)
+        
+        setUserData(newUserData)
+        setSessionId(newSessionId)
+        setCurrentStep('chat')
+        
+        // Initialize chat with personalized greeting
+        const greetingMessage: Message = {
+          id: "1",
+          text: `Hey ${newUserData.name}! 👋 I'm powered by Quickly4u's RAG technology. Try asking me anything about your business needs - I'll show you how intelligent conversation should work!`,
+          sender: "bot",
+          timestamp: new Date(),
+        }
+        setMessages([greetingMessage])
+      } else {
+        alert('Failed to submit form. Please try again.')
       }
     } catch (error) {
-      console.warn("Webhook error:", error)
+      console.error('Form submission error:', error)
+      alert('Failed to submit form. Please try again.')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return
+    if (!inputValue.trim() || !sessionId) return
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -107,28 +154,69 @@ export default function InteractiveChatbot() {
     }
 
     setMessages((prev) => [...prev, userMessage])
+    const currentMessage = inputValue
     setInputValue("")
     setIsTyping(true)
 
-    // Send webhook data
-    await sendWebhookData(inputValue)
+    // Send to webhook
+    try {
+      const webhookData: WebhookData = {
+        message: currentMessage,
+        timestamp: new Date().toISOString(),
+        sessionId: sessionId,
+        userAgent: navigator.userAgent,
+      }
 
-    // Simulate bot typing delay
-    setTimeout(
-      () => {
-        const randomResponse = botResponses[Math.floor(Math.random() * botResponses.length)]
+      const response = await fetch("/api/webhook/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(webhookData),
+      })
+
+      const result = await response.json()
+      
+      if (result.success) {
+        let displayText = result.botResponse // fallback
+        
+        // If we have webhook data, extract the output field
+        if (result.webhookData && result.webhookData.output) {
+          displayText = result.webhookData.output
+        } else if (result.webhookData) {
+          // If no output field, try other common fields or fallback to JSON
+          displayText = result.webhookData.message || result.webhookData.response || result.webhookData.reply || JSON.stringify(result.webhookData, null, 2)
+        }
+        
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
-          text: randomResponse,
+          text: displayText,
           sender: "bot",
           timestamp: new Date(),
         }
-
         setMessages((prev) => [...prev, botMessage])
-        setIsTyping(false)
-      },
-      1500 + Math.random() * 1000,
-    )
+      } else {
+        // Fallback response
+        const botMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          text: "I'm sorry, I couldn't process your request at the moment. Please try again.",
+          sender: "bot",
+          timestamp: new Date(),
+        }
+        setMessages((prev) => [...prev, botMessage])
+      }
+    } catch (error) {
+      console.error('Chat error:', error)
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm experiencing some technical difficulties. Please try again.",
+        sender: "bot",
+        timestamp: new Date(),
+      }
+      setMessages((prev) => [...prev, botMessage])
+    } finally {
+      setIsTyping(false)
+    }
   }
 
   const handleKeyPress = (e: KeyboardEvent) => {
@@ -142,26 +230,132 @@ export default function InteractiveChatbot() {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   }
 
+  const resetChat = () => {
+    localStorage.removeItem('quickly4u_user_data')
+    localStorage.removeItem('quickly4u_session_id')
+    setCurrentStep('form')
+    setUserData(null)
+    setSessionId('')
+    setMessages([])
+    setFormData({ name: '', email: '', mobile: '', company: '' })
+  }
+
+  if (currentStep === 'form') {
+    return (
+      <Card className="w-full max-w-md mx-auto shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-quickly-purple to-quickly-orange flex items-center justify-center">
+                <Bot className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-lg">Quickly4u Demo</CardTitle>
+                <p className="text-xs text-slate-500">Let's get started!</p>
+              </div>
+            </div>
+            <Badge className="bg-quickly-orange/10 text-quickly-orange border-quickly-orange/20">
+              <Zap className="w-3 h-3 mr-1" />
+              RAG Powered
+            </Badge>
+          </div>
+        </CardHeader>
+
+        <CardContent className="p-4">
+          {/* Single message asking for details */}
+          <div className="mb-4">
+            <div className="flex items-start space-x-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-quickly-purple to-quickly-orange flex items-center justify-center flex-shrink-0">
+                <Bot className="w-4 h-4 text-white" />
+              </div>
+              <div className="bg-slate-100 rounded-2xl px-4 py-3 max-w-[90%]">
+                <p className="text-sm text-slate-900">
+                  Hi! 👋 I need your details to get started. Please fill out the form below:
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Simple form */}
+          <form onSubmit={handleFormSubmit} className="space-y-4">
+            <div className="space-y-3">
+              <Input
+                type="text"
+                placeholder="Your Name"
+                value={formData.name}
+                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                className="border-slate-300 focus:border-quickly-blue focus:ring-quickly-blue"
+                required
+              />
+              <Input
+                type="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                className="border-slate-300 focus:border-quickly-blue focus:ring-quickly-blue"
+                required
+              />
+              <Input
+                type="tel"
+                placeholder="Mobile Number"
+                value={formData.mobile}
+                onChange={(e) => setFormData(prev => ({ ...prev, mobile: e.target.value }))}
+                className="border-slate-300 focus:border-quickly-blue focus:ring-quickly-blue"
+                required
+              />
+              <Input
+                type="text"
+                placeholder="Company Name"
+                value={formData.company}
+                onChange={(e) => setFormData(prev => ({ ...prev, company: e.target.value }))}
+                className="border-slate-300 focus:border-quickly-blue focus:ring-quickly-blue"
+                required
+              />
+            </div>
+            
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90"
+            >
+              {isSubmitting ? 'Starting Chat...' : 'Start Chatting'}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <Card className="w-full max-w-md mx-auto shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-quickly-blue to-quickly-purple rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-quickly-purple to-quickly-orange flex items-center justify-center">
               <Bot className="w-5 h-5 text-white" />
             </div>
             <div>
               <CardTitle className="text-lg">Quickly4u Demo</CardTitle>
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isConnected ? "bg-green-500" : "bg-red-500"}`}></div>
-                <span className="text-xs text-slate-500">{isConnected ? "Online" : "Offline"}</span>
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <span className="text-xs text-slate-500">Online</span>
               </div>
             </div>
           </div>
-          <Badge className="bg-quickly-orange/10 text-quickly-orange border-quickly-orange/20">
-            <Zap className="w-3 h-3 mr-1" />
-            RAG Powered
-          </Badge>
+          <div className="flex items-center space-x-2">
+            <Badge className="bg-quickly-orange/10 text-quickly-orange border-quickly-orange/20">
+              <Zap className="w-3 h-3 mr-1" />
+              RAG Powered
+            </Badge>
+            <Button
+              onClick={resetChat}
+              variant="outline"
+              size="sm"
+              className="text-xs px-2 py-1 h-auto"
+            >
+              Reset
+            </Button>
+          </div>
         </div>
       </CardHeader>
 
@@ -252,7 +446,7 @@ export default function InteractiveChatbot() {
             </Button>
           </div>
           <p className="text-xs text-slate-500 mt-2 text-center">
-            This demo showcases Quickly4u's conversational intelligence
+            Chatting as {userData?.name} • Session: {sessionId.slice(-8)}
           </p>
         </div>
       </CardContent>

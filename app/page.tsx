@@ -21,9 +21,52 @@ import {
 } from "lucide-react"
 
 import InteractiveChatbot from "@/components/interactive-chatbot"
-import { useEffect } from "react"
+import ContactModal from "@/components/contact-modal"
+import { useEffect, useState } from "react"
+
+// Animated emoji component
+function MadeWithLoveMessage() {
+  const [currentEmojiIndex, setCurrentEmojiIndex] = useState(0)
+  const emojis = [
+    { emoji: '❤️', className: 'text-red-500' },
+    { emoji: '🎉', className: '' },
+    { emoji: '🎂', className: '' },
+    { emoji: '💪', className: '' }
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentEmojiIndex((prev) => (prev + 1) % emojis.length)
+    }, 1000) // Change emoji every 1 second
+
+    return () => clearInterval(interval)
+  }, [])
+
+  return (
+    <div className="text-center text-gray-500 text-sm">
+      <p className="flex items-center justify-center space-x-1">
+        <span>Made with</span>
+        <div className="relative inline-block w-6 h-6">
+          <span 
+            key={currentEmojiIndex}
+            className={`absolute inset-0 flex items-center justify-center transition-all duration-300 transform ${
+              emojis[currentEmojiIndex].className
+            } animate-pulse`}
+          >
+            {emojis[currentEmojiIndex].emoji}
+          </span>
+        </div>
+        <span>in</span>
+        <span>🌍</span>
+      </p>
+    </div>
+  )
+}
 
 export default function HomePage() {
+  const [isYearly, setIsYearly] = useState(false)
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false)
+  
   // Add this useEffect right after the component declaration
   useEffect(() => {
     // Force scroll to top when component mounts
@@ -65,13 +108,12 @@ export default function HomePage() {
                 Pricing
               </button>
               <Button
-                variant="outline"
-                className="border-quickly-blue text-quickly-blue hover:bg-quickly-blue hover:text-white bg-transparent"
+                size="sm"
+                className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90 text-white px-4 py-1 text-sm"
+                onClick={() => setIsContactModalOpen(true)}
               >
-                Sign In
-              </Button>
-              <Button className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90">
-                Start Free Trial
+                Contact Sales
+                <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </div>
           </div>
@@ -84,7 +126,7 @@ export default function HomePage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Column - Content */}
-            <div>
+            <div className="text-center lg:text-left">
               <Badge className="mb-6 bg-quickly-orange/10 text-quickly-orange border-quickly-orange/20 hover:bg-quickly-orange/20">
                 🚀 Next-Gen AI Chatbots
               </Badge>
@@ -103,17 +145,19 @@ export default function HomePage() {
                 <Button
                   size="lg"
                   className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90 text-lg px-8 py-4"
+                  onClick={() => window.open('https://cal.com/quickly4u/quicklydemochatbot', '_blank')}
                 >
-                  Try It Free for 14 Days
+                  Book a Call
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   className="border-quickly-blue text-quickly-blue hover:bg-quickly-blue hover:text-white text-lg px-8 py-4 bg-transparent"
+                  onClick={() => setIsContactModalOpen(true)}
                 >
                   <Play className="mr-2 w-5 h-5" />
-                  Watch 2-Min Demo
+                  Contact Sales
                 </Button>
               </div>
 
@@ -427,8 +471,11 @@ export default function HomePage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <Button className="w-full bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90">
-                  Schedule Custom Demo
+                <Button 
+                  className="w-full bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90"
+                  onClick={() => window.open('https://cal.com/quickly4u/quicklydemochatbot', '_blank')}
+                >
+                  Book a Call
                 </Button>
               </CardContent>
             </Card>
@@ -511,13 +558,12 @@ export default function HomePage() {
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Enterprise Security & Compliance</h3>
                   <p className="text-slate-600 mb-3">
-                    GDPR and SOC 2 Type II compliance with end-to-end encryption and privacy-first data handling with no
-                    third-party sharing.
+                    Industry-standard security with end-to-end encryption and privacy-first data handling—no third-party sharing.
                   </p>
                   <ul className="space-y-1 text-sm text-slate-600">
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-4 h-4 text-green-500" />
-                      <span>GDPR and SOC 2 Type II compliance</span>
+                      <span>Security best practices</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-4 h-4 text-green-500" />
@@ -593,8 +639,11 @@ export default function HomePage() {
                     <p className="text-slate-600 mb-4">
                       See how these features work together to create truly intelligent conversations.
                     </p>
-                    <Button className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90">
-                      Request Live Demo
+                    <Button 
+                      className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90"
+                      onClick={() => window.open('https://cal.com/quickly4u/quicklydemochatbot', '_blank')}
+                    >
+                      Book a Call
                     </Button>
                   </div>
                 </CardContent>
@@ -694,11 +743,11 @@ export default function HomePage() {
           <div className="flex flex-wrap justify-center items-center gap-8 mb-8">
             <Badge variant="outline" className="px-4 py-2">
               <Shield className="w-4 h-4 mr-2" />
-              SOC 2 Type II Certified
+              Security Focused
             </Badge>
             <Badge variant="outline" className="px-4 py-2">
               <CheckCircle className="w-4 h-4 mr-2" />
-              GDPR Compliant
+              Data Encryption
             </Badge>
             <Badge variant="outline" className="px-4 py-2">
               <TrendingUp className="w-4 h-4 mr-2" />
@@ -722,10 +771,32 @@ export default function HomePage() {
                 Not Just Technology
               </span>
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
               The average business saves $2,400/month in support costs while generating $5,000+ in additional revenue.
               Your ROI typically pays for Quickly4u within the first month.
             </p>
+            
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center space-x-4 mb-8">
+              <span className={`text-slate-600 ${!isYearly ? 'font-semibold text-quickly-blue' : ''}`}>Monthly</span>
+              <div className="relative">
+                <input 
+                  type="checkbox" 
+                  id="billing-toggle" 
+                  className="sr-only" 
+                  checked={isYearly}
+                  onChange={() => setIsYearly(!isYearly)}
+                />
+                <label htmlFor="billing-toggle" className="flex items-center cursor-pointer">
+                  <div className="relative">
+                    <div className={`block w-14 h-8 rounded-full transition-colors ${isYearly ? 'bg-quickly-blue' : 'bg-slate-300'}`}></div>
+                    <div className={`dot absolute top-1 bg-white w-6 h-6 rounded-full transition-transform ${isYearly ? 'translate-x-6' : 'translate-x-1'}`}></div>
+                  </div>
+                </label>
+              </div>
+              <span className={`text-slate-600 ${isYearly ? 'font-semibold text-quickly-blue' : ''}`}>Yearly</span>
+              <Badge className="bg-green-100 text-green-800 border-green-200">2 months free</Badge>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -733,8 +804,11 @@ export default function HomePage() {
               <CardHeader className="text-center pb-8">
                 <CardTitle className="text-2xl font-bold text-slate-900">Professional</CardTitle>
                 <CardDescription className="text-slate-600 mb-4">Perfect for Growing Businesses</CardDescription>
-                <div className="text-4xl font-bold text-quickly-blue mb-2">$149</div>
-                <div className="text-slate-600">/month</div>
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <span className="text-2xl text-slate-400 line-through">{isYearly ? '$588' : '$149'}</span>
+                  <span className="text-4xl font-bold text-quickly-blue">{isYearly ? '$490' : '$49'}</span>
+                </div>
+                <div className="text-slate-600">{isYearly ? '/year' : '/month'}</div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-3">
@@ -759,8 +833,11 @@ export default function HomePage() {
                     <span>Priority support and training</span>
                   </li>
                 </ul>
-                <Button className="w-full mt-8 bg-quickly-blue hover:bg-quickly-blue/90">
-                  Start Professional Trial
+                <Button 
+                  className="w-full mt-8 bg-quickly-blue hover:bg-quickly-blue/90"
+                  onClick={() => window.open('https://cal.com/quickly4u/quicklydemochatbot', '_blank')}
+                >
+                  Book a Call
                 </Button>
               </CardContent>
             </Card>
@@ -776,10 +853,11 @@ export default function HomePage() {
                 <CardDescription className="text-slate-600 mb-4">
                   Complete Business Intelligence Solution
                 </CardDescription>
-                <div className="text-4xl font-bold bg-gradient-to-r from-quickly-blue to-quickly-purple bg-clip-text text-transparent mb-2">
-                  $499
+                <div className="flex items-center justify-center space-x-2 mb-2">
+                  <span className="text-2xl text-slate-400 line-through">{isYearly ? '$3588' : '$499'}</span>
+                  <span className="text-4xl font-bold bg-gradient-to-r from-quickly-blue to-quickly-purple bg-clip-text text-transparent">{isYearly ? '$2990' : '$299'}</span>
                 </div>
-                <div className="text-slate-600">/month</div>
+                <div className="text-slate-600">{isYearly ? '/year' : '/month'}</div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <ul className="space-y-3">
@@ -808,8 +886,11 @@ export default function HomePage() {
                     <span>Custom integrations</span>
                   </li>
                 </ul>
-                <Button className="w-full mt-8 bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90">
-                  Start Enterprise Trial
+                <Button 
+                  className="w-full mt-8 bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90"
+                  onClick={() => window.open('https://cal.com/quickly4u/quicklydemochatbot', '_blank')}
+                >
+                  Book a Call
                 </Button>
               </CardContent>
             </Card>
@@ -847,160 +928,206 @@ export default function HomePage() {
                 <Button
                   variant="outline"
                   className="w-full mt-8 border-quickly-orange text-quickly-orange hover:bg-quickly-orange hover:text-quickly-blue bg-transparent"
+                  onClick={() => setIsContactModalOpen(true)}
                 >
                   Contact Sales
                 </Button>
               </CardContent>
             </Card>
           </div>
+          
+          {/* Separator */}
+          <div className="flex items-center justify-center my-12">
+            <div className="flex-grow border-t border-slate-300"></div>
+            <div className="mx-4 text-slate-500 font-medium">Enterprise Solutions</div>
+            <div className="flex-grow border-t border-slate-300"></div>
+          </div>
+          
+          {/* On-Premise Plan - Compact */}
+          <div className="max-w-5xl mx-auto">
+            <Card className="relative border-0 shadow-xl hover:shadow-2xl transition-all duration-300 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 border-2 border-quickly-blue/20 overflow-hidden">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 bg-gradient-to-br from-quickly-blue/5 to-quickly-purple/5"></div>
+              <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-br from-quickly-blue/10 to-quickly-purple/10 rounded-full -translate-y-24 translate-x-24"></div>
+              
+
+              
+              <div className="relative z-10">
+                <CardHeader className="text-center pb-6 pt-12">
+                  <CardTitle className="text-3xl font-bold text-slate-900 mb-2">
+                    On-Premise Deployment
+                  </CardTitle>
+                  <CardDescription className="text-lg text-slate-600 mb-6">
+                    Complete ownership with your own infrastructure and LLM API
+                  </CardDescription>
+                  
+                  {/* Pricing Display - Inline */}
+                  <div className="flex items-center justify-center space-x-4 mb-6">
+                    <div className="text-4xl font-bold bg-gradient-to-r from-quickly-blue to-quickly-purple bg-clip-text text-transparent">
+                      $2,999
+                    </div>
+                    <div className="text-slate-600">
+                      <div className="text-lg font-semibold">One-time cost</div>
+                      <div className="text-sm text-quickly-blue font-medium">No recurring fees</div>
+                    </div>
+                  </div>
+                </CardHeader>
+                
+                <CardContent className="px-6 pb-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* What's Included */}
+                    <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-quickly-blue/10">
+                      <h4 className="text-lg font-bold text-slate-900 mb-4 flex items-center">
+                        <CheckCircle className="w-5 h-5 text-quickly-blue mr-2" />
+                        What's Included
+                      </h4>
+                      <ul className="space-y-3">
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-blue to-quickly-purple rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Complete on-premise deployment</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-blue to-quickly-purple rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Use your own LLM API (OpenAI, Claude, etc.)</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-blue to-quickly-purple rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Full source code access & customization</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-blue to-quickly-purple rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Complete data control & privacy</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-blue to-quickly-purple rounded-full flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">90 days implementation support</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    {/* Perfect For */}
+                    <div className="bg-white/60 backdrop-blur-sm rounded-lg p-6 border border-quickly-purple/10">
+                      <h4 className="text-lg font-bold text-slate-900 mb-4 flex items-center">
+                        <Star className="w-5 h-5 text-quickly-purple mr-2" />
+                        Perfect For
+                      </h4>
+                      <ul className="space-y-3">
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-purple to-quickly-orange rounded-full flex items-center justify-center flex-shrink-0">
+                            <Shield className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">High-security requirements</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-purple to-quickly-orange rounded-full flex items-center justify-center flex-shrink-0">
+                            <Globe className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Data sovereignty compliance</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-purple to-quickly-orange rounded-full flex items-center justify-center flex-shrink-0">
+                            <Brain className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Custom AI model integration</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-purple to-quickly-orange rounded-full flex items-center justify-center flex-shrink-0">
+                            <Users className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Large enterprise deployments</span>
+                        </li>
+                        <li className="flex items-center space-x-3">
+                          <div className="w-5 h-5 bg-gradient-to-r from-quickly-purple to-quickly-orange rounded-full flex items-center justify-center flex-shrink-0">
+                            <BarChart3 className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 text-sm font-medium">Cost control for high-volume usage</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  {/* CTA Section - Compact */}
+                  <div className="mt-8 text-center">
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90 text-white px-12 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                      onClick={() => window.open('https://cal.com/quickly4u/quicklydemochatbot', '_blank')}
+                    >
+                      Schedule Enterprise Consultation
+                      <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                    <p className="text-slate-600 mt-3 text-sm">
+                      Get a personalized demo and implementation timeline
+                    </p>
+                  </div>
+                </CardContent>
+              </div>
+            </Card>
+          </div>
         </div>
       </section>
 
-      {/* Final CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-quickly-blue to-quickly-purple text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">Ready to Transform Your Business Conversations?</h2>
-          <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
-            Join the AI revolution with a 14-day free trial. No credit card required, no setup fees, full RAG
-            capabilities from day one.
-          </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button size="lg" className="bg-white text-quickly-blue hover:bg-gray-100 text-lg px-8 py-4">
-              Start Your Intelligence Trial
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-quickly-blue text-lg px-8 py-4 bg-transparent"
-            >
-              <Calendar className="mr-2 w-5 h-5" />
-              Schedule a Personal Demo
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-white text-white hover:bg-white hover:text-quickly-blue text-lg px-8 py-4 bg-transparent"
-            >
-              <Phone className="mr-2 w-5 h-5" />
-              Talk to an AI Specialist
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="text-2xl font-bold mb-2">14-Day Free Trial</div>
-              <div className="opacity-80">No credit card required</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold mb-2">Full RAG Capabilities</div>
-              <div className="opacity-80">From day one</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold mb-2">Expert Support</div>
-              <div className="opacity-80">Setup and training included</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
+      <footer className="bg-white border-t border-gray-200 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-quickly-blue to-quickly-purple rounded-lg flex items-center justify-center">
-                  <Brain className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold">Quickly4u</span>
-              </div>
-              <p className="text-slate-400 mb-4">
-                The Evolution of Conversation. Transform your business with intelligent AI that understands.
+          <div className="flex flex-col items-center space-y-6">
+            {/* Stylish Brand Name */}
+            <div className="text-center">
+              <span className="text-4xl font-bold bg-gradient-to-r from-quickly-blue to-quickly-purple bg-clip-text text-transparent">
+                quickly4u
+              </span>
+              <p className="text-gray-600 mt-2 text-sm">
+                The Evolution of Conversation
               </p>
             </div>
-            <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Features
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Integrations
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    API
-                  </a>
-                </li>
-              </ul>
+            
+            {/* Navigation Links */}
+            <div className="flex items-center space-x-8">
+              <button
+                onClick={() => document.getElementById("solution")?.scrollIntoView({ behavior: "smooth" })}
+                className="text-gray-600 hover:text-quickly-blue transition-colors"
+              >
+                Technology
+              </button>
+              <button
+                onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
+                className="text-gray-600 hover:text-quickly-blue transition-colors"
+              >
+                Features
+              </button>
+              <button
+                onClick={() => document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" })}
+                className="text-gray-600 hover:text-quickly-blue transition-colors"
+              >
+                Pricing
+              </button>
             </div>
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Careers
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <ul className="space-y-2 text-slate-400">
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Community
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-white transition-colors">
-                    Status
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
-            <p>© 2024 Quickly4u. All rights reserved. | Privacy Policy | Terms of Service</p>
+            
+            {/* Made with love message */}
+            <MadeWithLoveMessage />
           </div>
         </div>
       </footer>
+      
+      {/* Contact Modal */}
+      <ContactModal 
+        isOpen={isContactModalOpen} 
+        onClose={() => setIsContactModalOpen(false)}
+        title="Contact Sales"
+        description="Get in touch with our sales team to learn more about Quickly4u and find the perfect solution for your business."
+      />
     </div>
   )
 }

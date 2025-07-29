@@ -11,47 +11,55 @@ export async function POST(request: NextRequest) {
   try {
     const data: ChatWebhookData = await request.json()
 
-    // Log the received data (in production, you'd save this to a database)
+    // Log the received data
+    const clientIP = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
     console.log("Chat webhook received:", {
       message: data.message,
       timestamp: data.timestamp,
       sessionId: data.sessionId,
       userAgent: data.userAgent,
-      ip: request.ip || "unknown",
+      ip: clientIP,
     })
 
-    // Here you would typically:
-    // 1. Save the chat data to your database
-    // 2. Trigger analytics events
-    // 3. Send data to your CRM
-    // 4. Process the message for insights
+    let webhookResponseData = null
+    let botResponse = "I'm sorry, I couldn't process your request at the moment. Please try again."
 
-    // Example: Send to external webhook (replace with your actual endpoint)
+    // Send to external webhook
     try {
-      // Uncomment and replace with your actual webhook URL
-      /*
-      await fetch('https://your-webhook-endpoint.com/chat', {
+      const response = await fetch('https://n8n.quickly4u.com/webhook/6249c2e4-9bb6-4793-a6ec-a56ea19eef68', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer your-api-key' // if needed
         },
         body: JSON.stringify({
-          ...data,
+          message: data.message,
+          sessionId: data.sessionId,
+          timestamp: data.timestamp,
+          userAgent: data.userAgent,
           source: 'quickly4u-website',
-          ip: request.ip
+          ip: clientIP
         })
       })
-      */
+
+      if (response.ok) {
+        const webhookResult = await response.json()
+        webhookResponseData = webhookResult
+        // Extract the bot response from the webhook result for fallback
+        botResponse = webhookResult.response || webhookResult.message || webhookResult.reply || "Thank you for your message! Our AI is processing your request."
+      } else {
+        console.error('External webhook failed:', response.status, response.statusText)
+      }
     } catch (webhookError) {
       console.error("External webhook failed:", webhookError)
-      // Don't fail the request if external webhook fails
+      // Use fallback response
     }
 
     return NextResponse.json({
       success: true,
       message: "Chat data received successfully",
       sessionId: data.sessionId,
+      botResponse: botResponse,
+      webhookData: webhookResponseData
     })
   } catch (error) {
     console.error("Webhook error:", error)
