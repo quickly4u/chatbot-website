@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import GoogleAnalytics from '../components/GoogleAnalytics'
+import GoogleTagManager from '../components/GoogleTagManager'
+import NoScriptGTM from '../components/NoScriptGTM'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -18,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <GoogleTagManager />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <style>{`
 html {
@@ -28,6 +31,7 @@ html {
         `}</style>
       </head>
       <body>
+        <NoScriptGTM />
         <GoogleAnalytics />
         {children}
       </body>
