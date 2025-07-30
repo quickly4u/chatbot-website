@@ -1,6 +1,6 @@
 'use client'
 
-const GTM_ID = 'GTM-XXXXXX' // Replace with your GTM container ID
+const GTM_ID = 'K8KHBXVX' // GTM container ID
 
 export default function NoScriptGTM() {
   if (process.env.NODE_ENV !== 'production') {

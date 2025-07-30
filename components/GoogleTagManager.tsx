@@ -2,7 +2,7 @@
 
 import Script from 'next/script'
 
-const GTM_ID = 'GTM-XXXXXX' // Replace with your GTM container ID
+const GTM_ID = 'K8KHBXVX' // GTM container ID
 
 export default function GoogleTagManager() {
   if (process.env.NODE_ENV !== 'production') {
