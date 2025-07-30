@@ -1,30 +1,43 @@
 # NeuralGen AI Strategy
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+# Quickly4U - AI Chatbot Solutions
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/yogeshaiux-6153s-projects/v0-neural-gen-ai-strategy)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/vwT3lfHZD5e)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://quickly4u.vercel.app)
 
 ## Overview
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+This repository will stay in sync with your deployed chats on Quickly4U.
+Any changes you make to your deployed app will be automatically pushed to this repository from Quickly4U.
+
+## About
+
+Quickly4U provides AI-powered chatbot solutions to transform business communications. This is the official website for Quickly4U's chatbot services.
+
+## Features
+
+- Modern, responsive design
+- Interactive chatbot interface
+- Business solutions showcase
+- Contact and sales integration
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Run the development server: `npm run dev`
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ## Deployment
 
 Your project is live at:
 
-**[https://vercel.com/yogeshaiux-6153s-projects/v0-neural-gen-ai-strategy](https://vercel.com/yogeshaiux-6153s-projects/v0-neural-gen-ai-strategy)**
+**[https://quickly4u.vercel.app](https://quickly4u.vercel.app)**
 
-## Build your app
-
-Continue building your app on:
-
-**[https://v0.dev/chat/projects/vwT3lfHZD5e](https://v0.dev/chat/projects/vwT3lfHZD5e)**
+This project is deployed on Vercel and automatically updates on pushes to the main branch.
 
 ## How It Works
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
+1. Create and modify your project using Quickly4U
+2. Deploy your chats from the Quickly4U interface
 3. Changes are automatically pushed to this repository
 4. Vercel deploys the latest version from this repository
