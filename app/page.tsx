@@ -44,7 +44,7 @@ function MadeWithLoveMessage() {
 
   return (
     <div className="text-center text-gray-500 text-sm">
-      <p className="flex items-center justify-center space-x-1">
+      <div className="flex items-center justify-center space-x-1">
         <span>Made with</span>
         <div className="relative inline-block w-6 h-6">
           <span 
@@ -58,7 +58,7 @@ function MadeWithLoveMessage() {
         </div>
         <span>in</span>
         <span>🌍</span>
-      </p>
+      </div>
     </div>
   )
 }
