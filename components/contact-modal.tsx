@@ -47,7 +47,7 @@ export default function ContactModal({
     setIsSubmitting(true)
 
     try {
-      const response = await fetch('/api/webhook/form', {
+      const response = await fetch('/api/webhook/form/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,13 +55,35 @@ export default function ContactModal({
         body: JSON.stringify(formData),
       })
 
-      if (response.ok) {
+      // Check if response is ok and content type is JSON
+      if (!response.ok) {
+        console.error('API response not ok:', response.status, response.statusText)
+        const responseText = await response.text()
+        console.error('Response body:', responseText)
+        alert(`Server error: ${response.status} ${response.statusText}`)
+        return
+      }
+
+      const contentType = response.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
+        console.error('Response is not JSON:', contentType)
+        const responseText = await response.text()
+        console.error('Response body:', responseText)
+        alert('Server returned invalid response format')
+        return
+      }
+
+      const result = await response.json()
+      if (result.success) {
         setIsSubmitted(true)
         setTimeout(() => {
           onClose()
           setIsSubmitted(false)
           setFormData({ name: "", email: "", mobile: "", company: "" })
         }, 2000)
+      } else {
+        console.error('Form submission failed:', result.error)
+        alert('Failed to submit form. Please try again.')
       }
     } catch (error) {
       console.error('Error submitting form:', error)
