@@ -102,31 +102,13 @@ export default function InteractiveChatbot() {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch('/api/webhook/form/', {
+      const response = await fetch('/api/webhook/form', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData)
       })
-
-      // Check if response is ok and content type is JSON
-      if (!response.ok) {
-        console.error('API response not ok:', response.status, response.statusText)
-        const responseText = await response.text()
-        console.error('Response body:', responseText)
-        alert(`Server error: ${response.status} ${response.statusText}`)
-        return
-      }
-
-      const contentType = response.headers.get('content-type')
-      if (!contentType || !contentType.includes('application/json')) {
-        console.error('Response is not JSON:', contentType)
-        const responseText = await response.text()
-        console.error('Response body:', responseText)
-        alert('Server returned invalid response format')
-        return
-      }
 
       const result = await response.json()
 
