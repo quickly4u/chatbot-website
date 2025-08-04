@@ -109,6 +109,12 @@ export default function HomePage() {
               >
                 Pricing
               </button>
+              <button
+                onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
+                className="text-slate-600 hover:text-quickly-blue transition-colors"
+              >
+                FAQ
+              </button>
               <Button
                 size="sm"
                 className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90 text-white px-4 py-1 text-sm"
@@ -1079,7 +1085,232 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* FAQ Section - Modern Bento Style */}
+      <section id="faq" className="py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-quickly-blue rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-quickly-purple rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-quickly-orange rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Header */}
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-slate-200 mb-6">
+              <span className="text-quickly-blue font-medium text-sm">💬 Got Questions?</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+              Frequently Asked
+              <span className="block bg-gradient-to-r from-quickly-blue via-quickly-purple to-quickly-orange bg-clip-text text-transparent">
+                Questions
+              </span>
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Everything you need to know about Quickly4u's AI chatbot platform
+            </p>
+          </div>
 
+          {/* Bento Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            
+            {/* Featured FAQ - Large Card */}
+            <div className="lg:col-span-2 lg:row-span-2 group">
+              <div className="h-full bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-quickly-blue/10 to-quickly-purple/10 rounded-full blur-2xl"></div>
+                <div className="relative z-10">
+                  <div className="flex items-center mb-6">
+                    <div className="w-12 h-12 bg-gradient-to-r from-quickly-blue to-quickly-purple rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                      <Brain className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-slate-900">What makes Quickly4u different?</h3>
+                      <p className="text-quickly-blue font-medium text-sm">General</p>
+                    </div>
+                  </div>
+                  <p className="text-slate-700 text-lg leading-relaxed mb-6">
+                    Advanced RAG grounded in your real knowledge—no rigid scripts.
+                  </p>
+                  <div className="space-y-4">
+                    <div className="bg-gradient-to-r from-quickly-blue/5 to-quickly-purple/5 rounded-2xl p-4">
+                      <h4 className="font-semibold text-slate-900 mb-2">How fast can we launch?</h4>
+                      <p className="text-slate-600 text-sm">With plug-and-play embedding, many teams go live in minutes. We also offer 48-hour express setup or standard rollouts.</p>
+                    </div>
+                    <div className="bg-gradient-to-r from-quickly-purple/5 to-quickly-orange/5 rounded-2xl p-4">
+                      <h4 className="font-semibold text-slate-900 mb-2">Do we need technical expertise?</h4>
+                      <p className="text-slate-600 text-sm">No. Use the no-code builder, or embed via a short snippet.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* General FAQs Continued */}
+            <div className="space-y-6">
+              <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-quickly-blue to-quickly-purple rounded-xl flex items-center justify-center mr-3 shadow-md">
+                    <Users className="w-5 h-5 text-white" />
+                  </div>
+                  <h4 className="font-bold text-slate-900">What if the AI doesn't know an answer?</h4>
+                </div>
+                <p className="text-slate-600 text-sm leading-relaxed">It escalates to a human seamlessly, passing full context; gaps feed back to improve.</p>
+              </div>
+              
+              <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-quickly-purple to-quickly-orange rounded-xl flex items-center justify-center mr-3 shadow-md">
+                    <Globe className="w-5 h-5 text-white" />
+                  </div>
+                  <h4 className="font-bold text-slate-900">Can it integrate with our systems?</h4>
+                </div>
+                <p className="text-slate-600 text-sm leading-relaxed">Yes—CRM, help desk, e-commerce, communication tools, and custom APIs.</p>
+              </div>
+            </div>
+
+            {/* Technical FAQs */}
+            <div className="lg:col-span-2 bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-quickly-purple/10 to-quickly-blue/10 rounded-full blur-xl"></div>
+              <div className="relative z-10">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-r from-quickly-purple to-quickly-blue rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900">Technical</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">Which AI models are supported?</h4>
+                      <p className="text-slate-600 text-sm">GPT-4, Claude 3.5, Gemini Pro, and custom LLMs.</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">Can we bring our own models/APIs?</h4>
+                      <p className="text-slate-600 text-sm">Yes—especially with On-Prem or dedicated Enterprise environments.</p>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">How secure is our data?</h4>
+                      <p className="text-slate-600 text-sm">Encryption at rest/in transit, RBAC/MFA/SSO, audit logs, isolation, backups, and regional residency. Schedule a demo and we'll show it live.</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">How does the knowledge base work?</h4>
+                      <p className="text-slate-600 text-sm">Upload docs/URLs, connect APIs or storage. The AI indexes and retrieves relevant content for grounded answers.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Cloud vs On-Prem */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+              <div className="flex items-center mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-quickly-blue to-quickly-orange rounded-xl flex items-center justify-center mr-3 shadow-md">
+                  <BarChart3 className="w-5 h-5 text-white" />
+                </div>
+                <h4 className="font-bold text-slate-900">Cloud vs On-Prem?</h4>
+              </div>
+              <p className="text-slate-600 text-sm leading-relaxed mb-3">Cloud = fastest setup, fully managed. On-Prem = total control behind your firewall.</p>
+              <div className="bg-gradient-to-r from-quickly-blue/5 to-quickly-orange/5 rounded-xl p-3">
+                <p className="text-xs text-slate-600">💡 Choose based on your security requirements, compliance needs, and infrastructure preferences</p>
+              </div>
+            </div>
+
+            {/* Plans & Billing Section */}
+            <div className="lg:col-span-2 bg-white/70 backdrop-blur-sm rounded-3xl p-8 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group relative overflow-hidden">
+              <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-quickly-orange/10 to-quickly-purple/10 rounded-full blur-2xl"></div>
+              <div className="relative z-10">
+                <div className="flex items-center mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-r from-quickly-orange to-quickly-purple rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                    <TrendingUp className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900">Plans & Billing</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">What's in the Professional plan?</h4>
+                      <p className="text-slate-600 text-sm">3 chatbots, 1GB storage, 5,000 conversations/month, multi-platform deployment, priority support, analytics, customization.</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">Can we change plans anytime?</h4>
+                      <p className="text-slate-600 text-sm">Yes. Upgrades are immediate; downgrades at the next cycle.</p>
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">What if we exceed our conversation limit?</h4>
+                      <p className="text-slate-600 text-sm">We notify you ahead of time—upgrade or add credits. No sudden cut-offs.</p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-slate-900 mb-2">Setup fees?</h4>
+                      <p className="text-slate-600 text-sm">None for cloud plans. On-Prem is a one-time $2,999 with 365 days of implementation support.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Security & Data Protection */}
+            <div className="bg-white/70 backdrop-blur-sm rounded-3xl p-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
+              <div className="flex items-center mb-6">
+                <div className="w-10 h-10 bg-gradient-to-r from-quickly-blue to-quickly-orange rounded-xl flex items-center justify-center mr-3 shadow-md">
+                  <Shield className="w-5 h-5 text-white" />
+                </div>
+                <h4 className="font-bold text-slate-900">Security & Data Protection</h4>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <h5 className="font-semibold text-slate-900 text-sm mb-1">Do you have formal certifications?</h5>
+                  <p className="text-slate-600 text-xs leading-relaxed">We emphasize transparent controls and third-party testing summaries (under NDA) over badges. We support security reviews and procurement due diligence.</p>
+                </div>
+                <div>
+                  <h5 className="font-semibold text-slate-900 text-sm mb-1">Can we use our own keys or run on-prem?</h5>
+                  <p className="text-slate-600 text-xs leading-relaxed">Yes—dedicated environments and On-Prem options are available.</p>
+                </div>
+                <div>
+                  <h5 className="font-semibold text-slate-900 text-sm mb-1">What happens to our data if we cancel?</h5>
+                  <p className="text-slate-600 text-xs leading-relaxed">You receive a full export, then we perform secure deletion and can provide confirmation.</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Enhanced CTA Section */}
+          <div className="text-center">
+            <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-12 border border-white/50 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-40 bg-gradient-to-br from-quickly-blue/10 via-quickly-purple/10 to-quickly-orange/10 rounded-full blur-3xl"></div>
+              <div className="relative z-10">
+                <h3 className="text-3xl font-bold text-slate-900 mb-4">Still have questions?</h3>
+                <p className="text-slate-600 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
+                  Our team is here to help you understand how Quickly4u can transform your customer interactions.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-quickly-blue to-quickly-purple hover:from-quickly-blue/90 hover:to-quickly-purple/90 text-white px-10 py-4 text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 rounded-2xl"
+                    onClick={() => setIsContactModalOpen(true)}
+                  >
+                    Contact Sales
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-2 border-quickly-blue text-quickly-blue hover:bg-quickly-blue hover:text-white px-10 py-4 text-lg font-semibold transition-all duration-300 hover:-translate-y-1 rounded-2xl shadow-lg hover:shadow-xl"
+                    onClick={() => window.open('https://cal.com/quickly4u/quicklydemochatbot', '_blank')}
+                  >
+                    <Calendar className="mr-2 w-5 h-5" />
+                    Book a Demo
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 py-12">
@@ -1121,6 +1352,12 @@ export default function HomePage() {
                 className="text-gray-600 hover:text-quickly-blue transition-colors"
               >
                 Pricing
+              </button>
+              <button
+                onClick={() => document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" })}
+                className="text-gray-600 hover:text-quickly-blue transition-colors"
+              >
+                FAQ
               </button>
             </div>
             
