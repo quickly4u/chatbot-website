@@ -81,9 +81,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-quickly-blue to-quickly-purple rounded-lg flex items-center justify-center">
-                <Brain className="w-5 h-5 text-white" />
-              </div>
+              <img 
+                src="/favicon.svg" 
+                alt="Quickly4u Logo" 
+                className="w-8 h-8"
+              />
               <span className="text-xl font-bold bg-gradient-to-r from-quickly-blue to-quickly-purple bg-clip-text text-transparent">
                 Quickly4u
               </span>
@@ -1083,11 +1085,18 @@ export default function HomePage() {
       <footer className="bg-white border-t border-gray-200 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center space-y-6">
-            {/* Stylish Brand Name */}
+            {/* Stylish Brand Name with Logo */}
             <div className="text-center">
-              <span className="text-4xl font-bold bg-gradient-to-r from-quickly-blue to-quickly-purple bg-clip-text text-transparent">
-                quickly4u
-              </span>
+              <div className="flex items-center justify-center space-x-3">
+                <img 
+                  src="/favicon.svg" 
+                  alt="Quickly4u Logo" 
+                  className="w-10 h-10"
+                />
+                <span className="text-4xl font-bold bg-gradient-to-r from-quickly-blue to-quickly-purple bg-clip-text text-transparent">
+                  quickly4u
+                </span>
+              </div>
               <p className="text-gray-600 mt-2 text-sm">
                 The Evolution of Conversation
               </p>
