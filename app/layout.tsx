@@ -2,6 +2,7 @@
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import GTMProvider from '@/components/GTMProvider'
 
 export const metadata: Metadata = {
   title: 'Quickly4U - AI Chatbot Solutions',
@@ -48,7 +49,9 @@ html {
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        {children}
+        <GTMProvider>
+          {children}
+        </GTMProvider>
       </body>
     </html>
   )
