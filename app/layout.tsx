@@ -2,6 +2,7 @@
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
+import { Suspense } from 'react'
 import GTMProvider from '@/components/GTMProvider'
 
 export const metadata: Metadata = {
@@ -49,9 +50,11 @@ html {
           />
         </noscript>
         {/* End Google Tag Manager (noscript) */}
-        <GTMProvider>
-          {children}
-        </GTMProvider>
+        <Suspense fallback={null}>
+          <GTMProvider>
+            {children}
+          </GTMProvider>
+        </Suspense>
       </body>
     </html>
   )
